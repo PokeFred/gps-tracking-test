@@ -10,11 +10,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout repository
-                uses: actions/checkout@v3
-            -   run: mkdir ./build
-            -   run: echo "Hello World" > ./build/index.html
+                uses: actions/checkout@v4.2.2
+            -   run: mkdir ./build && echo "Hello World" > ./build/index.html
             -   name: Upload build artifact
-                uses: actions/upload-artifact@v3
+                uses: actions/upload-artifact@v4.6.2
                 with:
                     name: app-build
                     path: ./build
@@ -33,20 +32,20 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout repository
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4.2.2
             -   name: Download build artifact
-                uses: actions/download-artifact@v3
+                uses: actions/download-artifact@v4.6.2
                 with:
                     name: app-build
                     path: ./build
             -   name: Setup pages
-                uses: actions/configure-pages@v3
+                uses: actions/configure-pages@v5.0.0
             -   name: Upload artifacts
-                uses: actions/upload-pages-artifact@v1
+                uses: actions/upload-pages-artifact@v3.0.1
                 with:
                     path: "./build"
             -   name: Deploy to GitHub-Pages
-                uses: actions/deploy-pages@v1
+                uses: actions/deploy-pages@v4.0.5
                 id: deployment
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
