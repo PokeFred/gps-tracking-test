@@ -11,7 +11,14 @@ jobs:
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v4.2.2
-            -   run: mkdir ./build && echo "Hello World" > ./build/index.html
+            -   name: Install NodeJS
+                uses: actions/setup-node@v4
+            -   name: Install dependencies
+                run: npm install
+            -   name: Build app
+                env:
+                    BASE_PATH: '/${{ github.event.repository.name }}'
+                run: npm run build
             -   name: Upload build artifact
                 uses: actions/upload-artifact@v4.6.2
                 with:
