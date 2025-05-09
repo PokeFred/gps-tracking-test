@@ -17,7 +17,7 @@ jobs:
                 run: npm install
             -   name: Build app
                 env:
-                    BASE_PATH: '/${{ github.event.repository.name }}'
+                    BASE_PATH: "/${{ github.event.repository.name }}"
                 run: npm run build
             -   name: Upload build artifact
                 uses: actions/upload-artifact@v4.6.2
