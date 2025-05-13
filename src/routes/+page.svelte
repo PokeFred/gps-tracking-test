@@ -1,19 +1,46 @@
-<script lang="ts">
-    import { onMount } from "svelte"
-    import { UserLocation } from "$utils/GPS"
+<svelte:head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</svelte:head>
 
-    let p: UserLocation | null = null
-    onMount(async (): Promise<void> => {
-        p = await UserLocation.fetchLocation()
-    })
+<script lang="ts">
+    import { UserLocation, UserLocationError } from "$utils/GPS"
 </script>
 
-<div>Werte</div>
-<div>Latitude: {#if p !== null} {p.getLat()} {/if}</div>
-<div>Longitude: {#if p !== null} {p.getLon()} {/if}</div>
-<div>Accuracy: {#if p !== null} {p.getAcc()} {/if}</div>
-<br />
-<div>Erklärungen</div>
-<div><span style="font-weight: 700;">Latitude</span>: Breitengrad (Nord/Süd)</div>
-<div><span style="font-weight: 700;">Longitude</span>: Längengrad (Ost/West)</div>
-<div><span style="font-weight: 700;">Accuracy</span>: Genauigkeit der Position in Metern</div>
+<div class="mx-auto max-w-sm border-x border-black">
+    <div class="text-xl font-bold text-center border-b border-black px-4 py-2">Title</div>
+    {#await UserLocation.fetchLocation()}
+        <div>Loading...</div>
+    {:then data: UserLocation}
+        <div class="p-4">
+            <div class="w-full text-base border border-black rounded-xl p-4">
+                <div class="grid grid-cols-[auto_auto]">
+                    <span class="underline">Werte</span>
+                    <span></span>
+                    <span>Latitude:</span>
+                    <span>{data.getLat()}</span>
+                    <span>Longitude:</span>
+                    <span>{data.getLon()}</span>
+                    <span>Accuracy:</span>
+                    <span>{data.getAcc()}</span>
+                    <span class="h-4"></span>
+                    <span></span>
+                    <span class="underline">Erklärungen</span>
+                    <span></span>
+                    <span class="font-bold">Latitude:</span>
+                    <span>Breitengrad (Nord/Süd)</span>
+                    <span class="font-bold">Longitude:</span>
+                    <span>Längengrad (Ost/West)</span>
+                    <span class="font-bold">Accuracy:</span>
+                    <span>Genauigkeit der Position in Metern</span>
+                </div>
+            </div>
+        </div>
+    {:catch error: UserLocationError}
+        <div class="p-4">
+            <div class="w-full text-white bg-red-500/60 border-2 border-red-500 rounded-xl p-4">
+                <div class="text-lg underline text-center">Fehler</div>
+                <div class="text-base text-center">{error.getMessage()}</div>
+            </div>
+        </div>
+    {/await}
+</div>
