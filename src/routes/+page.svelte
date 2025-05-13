@@ -1,28 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte"
+    import { UserLocation } from "$utils/GPS"
 
-    let lat: number | undefined = undefined
-    let lon: number | undefined = undefined
-    let acc: number | undefined = undefined
-
-    onMount((): void => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                lat = position.coords.latitude
-                lon = position.coords.longitude
-                acc = position.coords.accuracy
-            },
-            (error) => {
-                console.log(error.message)
-            }
-        )
+    let p: UserLocation | null = null
+    onMount(async (): Promise<void> => {
+        p = await UserLocation.fetchLocation()
     })
 </script>
 
 <div>Werte</div>
-<div>Latitude: {#if lat !== undefined} {lat} {/if}</div>
-<div>Longitude: {#if lon !== undefined} {lon} {/if}</div>
-<div>Accuracy: {#if acc !== undefined} {acc} {/if}</div>
+<div>Latitude: {#if p !== null} {p.getLat()} {/if}</div>
+<div>Longitude: {#if p !== null} {p.getLon()} {/if}</div>
+<div>Accuracy: {#if p !== null} {p.getAcc()} {/if}</div>
 <br />
 <div>Erklärungen</div>
 <div><span style="font-weight: 700;">Latitude</span>: Breitengrad (Nord/Süd)</div>
